@@ -1,29 +1,34 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
-// Importação dos componentes e páginas
+import './index.css';
 import BarraNavegacaoLateral from './componentes/BarraNavegacaoLateral';
 import Login from './paginas/login';
+import Home from './paginas/home';
 import PainelDashboard from './paginas/painelDashboard';
 import GestaoClientes from './paginas/gestaoClientes';
+import GestaoEquipamento from './paginas/gestaoEquipamento';
+import GestaoServico from './paginas/gestaoServico';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rota pública de Login (sem o menu lateral) */}
+        {/*Login sem o menu lateral */}
         <Route path="/login" element={<Login />} />
         
-        {/* Rota raiz redireciona para o login */}
+        
         <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Grupo de rotas privadas (com o menu lateral) */}
+        {/* Layout com barra Lateral */}
         <Route path="/*" element={
-          <div id="layout-principal" className="d-flex estrutura-base">
+          <div className="d-flex" style={{ minHeight: '100vh', backgroundColor: 'var(--bg)' }}>
             <BarraNavegacaoLateral />
-            <main id="area-conteudo" className="flex-grow-1 p-4 fundo-cinza-claro" style={{ height: '100vh', overflowY: 'auto' }}>
+            <main className="flex-grow-1 p-4" style={{ height: '100vh', overflowY: 'auto' }}>
               <Routes>
+                <Route path="/home" element={<Home />} />
                 <Route path="/dashboard" element={<PainelDashboard />} />
                 <Route path="/clientes" element={<GestaoClientes />} />
+                <Route path="/equipamentos" element={<GestaoEquipamento />} />
+                <Route path="/servicos" element={<GestaoServico />} />
               </Routes>
             </main>
           </div>
