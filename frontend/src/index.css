@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+   :root {
+     --bg: #0B120F;
+     --surface: #121D19;
+     --surface-2: #182722;
+     --line: #26362F;
+     --gold: #C9A24B;
+     --teal: #4FA98C;
+     --amber: #E0A339;
+     --text: #EDEAE0;
+     --muted: #8B9992;
+     --muted-2: #5E6E68;
+     --radius: 10px;
+   }
+   
+
+   body, html {
+     background-color: var(--bg) !important;
+     color: var(--text) !important;
+     font-family: 'Inter', sans-serif;
+     margin: 0;
+     padding: 0;
+   }
+   
+   
+   .card {
+     background-color: var(--surface) !important;
+     border: 1px solid var(--line) !important;
+     border-radius: var(--radius) !important;
+   }
+   
+   .form-control {
+     background-color: var(--surface-2) !important;
+     border: 1px solid var(--line) !important;
+     color: var(--text) !important;
+   }
+   
+   .form-control:focus {
+     border-color: var(--gold) !important;
+     box-shadow: 0 0 0 0.2rem rgba(201, 162, 75, 0.25) !important;
+   }
+   
+   .btn-primary {
+     background-color: var(--gold) !important;
+     border-color: var(--gold) !important;
+     color: #000 !important;
+     font-weight: 600;
+   }
+   
+   .btn-primary:hover {
+     background-color: #b5903e !important;
+     border-color: #b5903e !important;
+   }
+   
+   /* Estilizando as Tabelas do Bootstrap */
+   .table {
+     color: var(--text) !important;
+     border-color: var(--line) !important;
+   }
+   
+   .table thead th {
+     background-color: var(--surface) !important;
+     color: var(--muted) !important;
+     font-family: 'IBM Plex Mono', monospace;
+     border-bottom: 2px solid var(--line) !important;
+     text-transform: uppercase;
+     font-size: 12px;
+   }
+   
+   .table tbody td {
+     background-color: transparent !important;
+     border-bottom: 1px solid var(--line) !important;
+     vertical-align: middle;
+   }
+   
+   .table-hover tbody tr:hover td {
+     background-color: var(--surface-2) !important;
+     color: var(--text) !important;
+   }
+   
+
+   .pill {
+     display: inline-flex;
+     align-items: center;
+     gap: 6px;
+     font-family: 'IBM Plex Mono', monospace;
+     font-size: 11px;
+     letter-spacing: 0.04em;
+     padding: 4px 10px;
+     border-radius: 100px;
+   }
+   
+   .pill.pendente {
+     background: rgba(224,163,57,0.12);
+     color: var(--amber);
+     border: 1px solid rgba(224,163,57,0.35);
+   }
+   
+   .pill.concluida {
+     background: rgba(79,169,140,0.12);
+     color: var(--teal);
+     border: 1px solid rgba(79,169,140,0.35);
+   }
+   
+   .pill.aberta {
+     background: rgba(139, 153, 146, 0.12);
+     color: var(--muted);
+     border: 1px solid rgba(139, 153, 146, 0.35);
+   }
