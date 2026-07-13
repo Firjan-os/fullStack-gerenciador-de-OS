@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('admin');
-  const [senha, setSenha] = useState('admin');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
