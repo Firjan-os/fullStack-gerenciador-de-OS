@@ -22,21 +22,6 @@ export default function BarraNavegacaoLateral() {
       <ul className="nav nav-pills flex-column mb-auto lista-links gap-2">
         <li className="nav-item">
           <NavLink 
-            to="/home" 
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-            style={({ isActive }) => ({
-              color: isActive ? '#000' : 'var(--muted)',
-              backgroundColor: isActive ? 'var(--gold)' : 'transparent',
-              fontFamily: 'IBM Plex Mono',
-              fontSize: '14px',
-              transition: 'all 0.3s ease'
-            })}
-          >
-            Home
-          </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink 
             to="/dashboard" 
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             style={({ isActive }) => ({
