@@ -283,6 +283,12 @@ export default function GestaoServico() {
                       >
                         Editar
                       </button>
+                      <button
+                          className="btn btn-sm btn-outline-danger"
+                          onClick={() => handleExcluir(cliente.id)}
+                        >
+                          Excluir
+                        </button>
                     </td>
                   </tr>
                 ))}
