@@ -131,13 +131,13 @@ export default function GestaoServico() {
           className="card p-4 mb-4 shadow-sm"
           style={{ border: "1px solid var(--line)" }}
         >
-          <h4 style={{ fontFamily: "Fraunces" }} className="mb-4 --text">
+          <h4 style={{ fontFamily: "Fraunces" ,color: "white"} } className="mb-4 ">
             Abrir Nova Ordem de Serviço
           </h4>
           <form onSubmit={handleCadastrarOS}>
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label className="form-label" style={{ fontSize: "14px" }}>
+                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
                   ID do Usuário Responsável
                 </label>
                 <input
@@ -149,7 +149,7 @@ export default function GestaoServico() {
                 />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label" style={{ fontSize: "14px" }}>
+                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
                   ID do Equipamento
                 </label>
                 <input
@@ -163,7 +163,7 @@ export default function GestaoServico() {
             </div>
             <div className="row">
               <div className="col-md-9 mb-3">
-                <label className="form-label" style={{ fontSize: "14px" }}>
+                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
                   Descrição do Problema
                 </label>
                 <input
@@ -175,7 +175,7 @@ export default function GestaoServico() {
                 />
               </div>
               <div className="col-md-3 mb-3">
-                <label className="form-label" style={{ fontSize: "14px" }}>
+                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
                   Valor Previsto (R$)
                 </label>
                 <input
@@ -243,7 +243,7 @@ export default function GestaoServico() {
                     </td>
 
                     {/* Mapeamentos corrigidos acessando as propriedades internas com segurança (?) */}
-                    <td style={{ fontWeight: 500 }}>
+                    <td style={{ fontWeight: 500, color: 'var(--muted)'  }}>
                       {os.usuario?.nome || `Usuário #${os.usuario?.id || "-"}`}
                     </td>
                     <td style={{ color: "var(--muted)", fontSize: "14px" }}>
@@ -256,7 +256,7 @@ export default function GestaoServico() {
                     </td>
 
                     <td
-                      style={{ fontFamily: "IBM Plex Mono", fontSize: "13px" }}
+                      style={{ fontFamily: "IBM Plex Mono", fontSize: "13px", color: 'var(--muted)'}}
                     >
                       {formatarData(os.dataAbertura)}
                     </td>
