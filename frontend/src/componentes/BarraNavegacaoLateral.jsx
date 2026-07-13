@@ -21,7 +21,7 @@ export default function BarraNavegacaoLateral() {
       
       <ul className="nav nav-pills flex-column mb-auto lista-links gap-2">
         <li className="nav-item">
-          <NavLink 
+          {/* <NavLink 
             to="/home" 
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             style={({ isActive }) => ({
@@ -33,7 +33,7 @@ export default function BarraNavegacaoLateral() {
             })}
           >
             Home
-          </NavLink>
+          </NavLink> */}
         </li>
         <li className="nav-item">
           <NavLink 

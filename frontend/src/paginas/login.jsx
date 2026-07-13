@@ -10,7 +10,7 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     // Simulação de login
-    navigate('/home');
+    navigate('/dashboard');
   };
 
   return (
