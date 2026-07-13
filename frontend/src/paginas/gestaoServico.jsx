@@ -131,7 +131,7 @@ export default function GestaoServico() {
           className="card p-4 mb-4 shadow-sm"
           style={{ border: "1px solid var(--line)" }}
         >
-          <h4 style={{ fontFamily: "Fraunces" }} className="mb-4">
+          <h4 style={{ fontFamily: "Fraunces" }} className="mb-4 --text">
             Abrir Nova Ordem de Serviço
           </h4>
           <form onSubmit={handleCadastrarOS}>
