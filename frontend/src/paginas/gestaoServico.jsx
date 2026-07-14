@@ -22,10 +22,6 @@ export default function GestaoServico() {
   const [valorTotal, setValorTotal] = useState("");
   const [status, setStatus] = useState("ABERTA"); // Bate com StatusOS.ABERTA no back
 
-  useEffect(() => {
-    carregarOrdens();
-  }, []);
-
   const carregarOrdens = async () => {
     try {
       setCarregando(true);
@@ -39,6 +35,12 @@ export default function GestaoServico() {
       setCarregando(false);
     }
   };
+  
+  useEffect(() => {
+    carregarOrdens();
+  }, []);
+
+  
 
   // Preenche o formulário com os dados atuais da Ordem de Serviço selecionada
   const prepararEdicao = (os) => {
@@ -256,6 +258,7 @@ export default function GestaoServico() {
                   </label>
                   <select
                     className="form-select"
+                    style={{ backgroundColor: "var(--surface-2)", border: "1px solid var(--line)", fontSize: "14px", color: "white" }}
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     required

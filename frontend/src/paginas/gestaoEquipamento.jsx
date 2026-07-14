@@ -244,7 +244,7 @@ export default function GestaoEquipamento() {
               <tbody>
                 {!equipamentos || equipamentos.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-4 text-muted">
+                    <td colSpan={6} className="text-center py-4 text-muted">
                       Nenhum equipamento cadastrado no inventário.
                     </td>
                   </tr>
@@ -260,10 +260,12 @@ export default function GestaoEquipamento() {
                       >
                         #{eq.id}
                       </td>
-                      <td style={{ fontWeight: 500 }}>{eq.nome}</td>
+                      <td style={{ fontWeight: 500, color: "var(--muted)" }}>
+                        {eq.nome}
+                      </td>
                       <td style={{ color: "var(--muted)" }}>
                         {eq.marca || "-"}
-                      </td>
+                        </td>
                       <td style={{ color: "var(--muted)" }}>
                         {eq.modelo || "-"}
                       </td>
@@ -271,6 +273,7 @@ export default function GestaoEquipamento() {
                         style={{
                           fontFamily: "IBM Plex Mono",
                           fontSize: "13px",
+                          color: "var(--muted)",
                         }}
                       >
                         #{eq.usuarioId}

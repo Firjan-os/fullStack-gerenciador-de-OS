@@ -222,7 +222,9 @@ export default function GestaoClientes() {
                       >
                         #{cliente.id}
                       </td>
-                      <td style={{ fontWeight: 500 }}>{cliente.nome}</td>
+                      <td style={{ fontWeight: 500, color: "var(--muted)" }}>
+                        {cliente.nome}
+                      </td>
                       <td style={{ color: "var(--muted)" }}>
                         {cliente.telefone}
                       </td>

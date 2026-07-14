@@ -40,7 +40,6 @@ public class MassaDados implements CommandLineRunner {
         criarOrdensServico(equipamentos);
     }
     
-    //clientes
     private List<Usuario> criarUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
 
@@ -54,15 +53,19 @@ public class MassaDados implements CommandLineRunner {
         usuarios.add(new Usuario("Eduardo Silva", "11989012345", "eduardo.silva@email.com"));
         usuarios.add(new Usuario("Beatriz Ferreira", "67990123456", "beatriz.ferreira@email.com"));
         usuarios.add(new Usuario("Lucas Rocha", "21901234567", "lucas.rocha@email.com"));
+        usuarios.add(new Usuario("Julio Cesar", "11999999999", "julio.cesar@email.com"));
+        usuarios.add(new Usuario("Amanda Nunes", "21988888888", "amanda.nunes@email.com"));
+        usuarios.add(new Usuario("Roberto Carlos", "67977777777", "roberto.carlos@email.com"));
+        usuarios.add(new Usuario("Carla Diaz", "11966666666", "carla.diaz@email.com"));
+        usuarios.add(new Usuario("Pedro Henrique", "21955555555", "pedro.henrique@email.com"));
 
         return usuarioRepository.saveAll(usuarios);
     }
     
-    //equipamentos
     private List<Equipamento> criarEquipamentos(List<Usuario> usuarios) {
         List<Equipamento> equipamentos = new ArrayList<>();
 
-        int[] usuarioIndices = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4, 6, 8};
+        int[] usuarioIndices = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 2, 4, 6, 8, 10, 12, 14};
 
         String[][] dados = {
             {"Notebook Dell Inspiron", "Dell", "Inspiron 15"},
@@ -79,10 +82,18 @@ public class MassaDados implements CommandLineRunner {
             {"Fone de Ouvido Sony WH-1000XM4", "Sony", "WH-1000XM4"},
             {"Câmera Canon EOS T7", "Canon", "EOS 2000D"},
             {"HD Externo Seagate 1TB", "Seagate", "STGX1000400"},
-            {"Projetor Epson EB-X06", "Epson", "EB-X06"}
+            {"Projetor Epson EB-X06", "Epson", "EB-X06"},
+            {"MacBook Pro", "Apple", "M2 Pro"},
+            {"Galaxy Book", "Samsung", "NP750XDA"},
+            {"iPad Air", "Apple", "5ª Geração"},
+            {"Kindle Paperwhite", "Amazon", "11ª Geração"},
+            {"PlayStation 5", "Sony", "CFI-1214A"},
+            {"Nintendo Switch", "Nintendo", "OLED"},
+            {"Monitor Dell 27", "Dell", "S2721QS"},
+            {"Teclado Logitech K380", "Logitech", "K380"}
         };
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < dados.length; i++) {
             Equipamento equipamento = new Equipamento();
             equipamento.setNome(dados[i][0]);
             equipamento.setMarca(dados[i][1]);
@@ -94,44 +105,38 @@ public class MassaDados implements CommandLineRunner {
         return equipamentoRepository.saveAll(equipamentos);
     }
     
-    //ordens de serviço
     private void criarOrdensServico(List<Equipamento> equipamentos) {
         List<OrdemServico> ordens = new ArrayList<>();
 
-        LocalDateTime[] datas = {
-            LocalDateTime.of(2026, Month.JANUARY, 5, 10, 0),
-            LocalDateTime.of(2026, Month.JANUARY, 20, 14, 30),
-            LocalDateTime.of(2026, Month.FEBRUARY, 10, 9, 15),
-            LocalDateTime.of(2026, Month.FEBRUARY, 25, 16, 45),
-            LocalDateTime.of(2026, Month.MARCH, 8, 11, 0),
-            LocalDateTime.of(2026, Month.MARCH, 22, 13, 20),
-            LocalDateTime.of(2026, Month.APRIL, 5, 8, 30),
-            LocalDateTime.of(2026, Month.APRIL, 18, 15, 10),
-            LocalDateTime.of(2026, Month.MAY, 2, 12, 0),
-            LocalDateTime.of(2026, Month.MAY, 17, 10, 50),
-            LocalDateTime.of(2026, Month.JUNE, 1, 9, 30),
-            LocalDateTime.of(2026, Month.JUNE, 15, 14, 0),
-            LocalDateTime.of(2026, Month.JUNE, 28, 11, 45),
-            LocalDateTime.of(2026, Month.JULY, 5, 16, 20),
-            LocalDateTime.of(2026, Month.JULY, 10, 8, 0) // hoje
+        Object[][] dados = {
+            {Month.JANUARY, 5, 1200.00, "Troca de tela"},
+            {Month.JANUARY, 20, 2500.00, "Manutenção preventiva"},
+            {Month.JANUARY, 28, 350.00, "Instalação de SSD"},
+            {Month.FEBRUARY, 10, 800.00, "Limpeza interna"},
+            {Month.FEBRUARY, 25, 4300.00, "Substituição de bateria"},
+            {Month.FEBRUARY, 15, 1800.00, "Atualização de drivers"},
+            {Month.MARCH, 8, 1900.00, "Atualização de software"},
+            {Month.MARCH, 22, 3100.00, "Reparo na placa-mãe"},
+            {Month.MARCH, 30, 420.00, "Troca de teclado"},
+            {Month.APRIL, 5, 900.00, "Limpeza de cooler"},
+            {Month.APRIL, 18, 2700.00, "Instalação de memória"},
+            {Month.MAY, 2, 1500.00, "Remoção de vírus"},
+            {Month.MAY, 17, 400.00, "Backup de dados"},
+            {Month.MAY, 25, 3200.00, "Configuração de rede"},
+            {Month.JUNE, 1, 600.00, "Formatação"},
+            {Month.JUNE, 15, 2200.00, "Troca de fonte"},
+            {Month.JUNE, 28, 3800.00, "Reparo no conector"},
+            {Month.JULY, 5, 1300.00, "Substituição de cooler"},
+            {Month.JULY, 10, 5000.00, "Calibragem de tela"},
         };
 
-        Double[] valores = {120.00, 250.00, 80.00, 430.00, 190.00, 310.00, 90.00, 270.00, 150.00, 400.00, 60.00, 220.00, 380.00, 130.00, 500.00};
-
-        String[] descricoes = {
-            "Troca de tela", "Manutenção preventiva", "Limpeza interna", "Substituição de bateria",
-            "Atualização de software", "Reparo na placa-mãe", "Troca de teclado", "Instalação de memória",
-            "Remoção de vírus", "Backup de dados", "Configuração de rede", "Troca de fonte",
-            "Reparo no conector de carga", "Substituição de cooler", "Calibragem de tela"
-        };
-
-        for (int i = 0; i < equipamentos.size(); i++) {
-            Equipamento equipamento = equipamentos.get(i);
+        for (int i = 0; i < dados.length; i++) {
+            Equipamento equipamento = equipamentos.get(i % equipamentos.size());
             OrdemServico os = new OrdemServico();
-            os.setDataAbertura(datas[i]);
+            os.setDataAbertura(LocalDateTime.of(2026, (Month) dados[i][0], (int) dados[i][1], 10, 0));
             os.setStatus(StatusOS.ABERTA);
-            os.setValorTotal(valores[i]);
-            os.setDescricao(descricoes[i]);
+            os.setValorTotal((Double) dados[i][2]);
+            os.setDescricao((String) dados[i][3]);
             os.setUsuario(equipamento.getUsuario());
             os.setEquipamento(equipamento);
             ordens.add(os);
