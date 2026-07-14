@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   listarClientes,
   cadastrarCliente,
+  atualizarCliente,
   excluirCliente,
 } from "../services/api";
 
@@ -11,8 +12,9 @@ export default function GestaoClientes() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
-  // Estados para o formulário de cadastro (Novo Cliente)
+  // Estados para o formulário 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [idEdicao, setIdEdicao] = useState(null);
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
@@ -27,7 +29,7 @@ export default function GestaoClientes() {
     try {
       setCarregando(true);
       const response = await listarClientes();
-      setClientes(response.data); // Salva a lista vinda do banco no estado
+      setClientes(response.data || []); 
       setErro(null);
     } catch (err) {
       console.error("Erro ao buscar clientes:", err);
@@ -39,23 +41,40 @@ export default function GestaoClientes() {
     }
   }
 
-  // Função para enviar o novo cliente para o banco de dados
-  async function handleCadastrar(e) {
+  // Preenche os inputs com as informações do cliente selecionado e abre o form
+  function prepararEdicao(cliente) {
+    setIdEdicao(cliente.id);
+    setNome(cliente.nome || "");
+    setTelefone(cliente.telefone || "");
+    setEmail(cliente.email || "");
+    setMostrarFormulario(true);
+  }
+
+  // Limpa o formulário e os controles de edição
+  function resetarFormulario() {
+    setNome("");
+    setTelefone("");
+    setEmail("");
+    setIdEdicao(null);
+    setMostrarFormulario(false);
+  }
+
+  // Função para enviar os dados (Cadastro ou Atualização) para o banco de dados
+  async function handleSalvar(e) {
     e.preventDefault();
     try {
-      const novoCliente = { nome, telefone, email };
-      await cadastrarCliente(novoCliente);
+      const dadosCliente = { nome, telefone, email };
 
-      // Limpa os campos e fecha o formulário
-      setNome("");
-      setTelefone("");
-      setEmail("");
-      setMostrarFormulario(false);
+      if (idEdicao) {
+        await atualizarCliente(idEdicao, dadosCliente);
+      } else {
+        await cadastrarCliente(dadosCliente);
+      }
 
-      // Atualiza a lista na tela com os dados novos
+      resetarFormulario();
       buscarDadosDoBanco();
     } catch (err) {
-      console.error("Erro ao cadastrar cliente:", err);
+      console.error("Erro ao salvar cliente:", err);
       alert("Erro ao salvar o cliente.");
     }
   }
@@ -65,7 +84,7 @@ export default function GestaoClientes() {
     if (window.confirm("Tem certeza que deseja excluir este cliente?")) {
       try {
         await excluirCliente(id);
-        buscarDadosDoBanco(); // Atualiza a lista após deletar
+        buscarDadosDoBanco();
       } catch (err) {
         console.error("Erro ao excluir cliente:", err);
         alert("Erro ao excluir o cliente.");
@@ -98,19 +117,25 @@ export default function GestaoClientes() {
         </div>
         <button
           className="btn btn-primary px-4"
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
+          onClick={() => {
+            if (mostrarFormulario) {
+              resetarFormulario();
+            } else {
+              setMostrarFormulario(true);
+            }
+          }}
         >
           {mostrarFormulario ? "Cancelar" : "+ Novo Cliente"}
         </button>
       </header>
 
-      {/* Formulário Dinâmico de Cadastro */}
+      {/* Formulário Dinâmico de Cadastro / Edição */}
       {mostrarFormulario && (
         <div className="card p-4 mb-4 shadow-sm">
           <h4 style={{ fontFamily: "Fraunces" }} className="mb-3">
-            Novo Cliente
+            {idEdicao ? "Editar Cliente" : "Novo Cliente"}
           </h4>
-          <form onSubmit={handleCadastrar}>
+          <form onSubmit={handleSalvar}>
             <div className="row">
               <div className="col-md-4 mb-3">
                 <label className="form-label">Nome</label>
@@ -144,7 +169,7 @@ export default function GestaoClientes() {
               </div>
             </div>
             <button type="submit" className="btn btn-success px-4">
-              Salvar no Banco
+              {idEdicao ? "Atualizar no Banco" : "Salvar no Banco"}
             </button>
           </form>
         </div>
@@ -173,7 +198,7 @@ export default function GestaoClientes() {
                 </tr>
               </thead>
               <tbody>
-                {clientes.length === 0 ? (
+                {!clientes || clientes.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="text-center py-4 text-muted">
                       Nenhum cliente cadastrado no banco de dados.
@@ -203,6 +228,7 @@ export default function GestaoClientes() {
                             border: "1px solid var(--line)",
                             color: "var(--text)",
                           }}
+                          onClick={() => prepararEdicao(cliente)}
                         >
                           Editar
                         </button>
@@ -214,7 +240,7 @@ export default function GestaoClientes() {
                         </button>
                       </td>
                     </tr>
-                  ))
+                  )) 
                 )}
               </tbody>
             </table>

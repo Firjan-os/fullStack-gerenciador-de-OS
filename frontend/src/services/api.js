@@ -15,11 +15,15 @@ export const cadastrarCliente = (cliente) => {
   return axios.post(CLIENTES_URL, cliente);
 };
 
+// Atualizar um cliente existente (PUT)
+export const atualizarCliente = (id, clienteAtualizado) => {
+  return axios.put(`${CLIENTES_URL}/${id}`, clienteAtualizado);
+};
+
 // Excluir um cliente pelo ID (DELETE)
 export const excluirCliente = (id) => {
   return axios.delete(`${CLIENTES_URL}/${id}`);
 };
-
 
 // ==========================================
 // 2. ROTAS DE EQUIPAMENTOS

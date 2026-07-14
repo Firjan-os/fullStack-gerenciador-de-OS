@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
-import { listarOrdens, cadastrarOrdem } from "../services/api";
+import { 
+  listarOrdens, 
+  cadastrarOrdem, 
+  atualizarOrdem, 
+  excluirOrdem    
+} from "../services/api";
 
 export default function GestaoServico() {
   const [ordens, setOrdens] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
-  // ESTADO DO FORMULÁRIO
+  // ESTADO DO FORMULÁRIO E EDIÇÃO
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [idEdicao, setIdEdicao] = useState(null); // CONTROLE DE EDIÇÃO: Guarda o ID da OS sendo editada
 
   // ESTADOS DOS CAMPOS
   const [usuarioId, setUsuarioId] = useState("");
@@ -23,7 +29,7 @@ export default function GestaoServico() {
     try {
       setCarregando(true);
       const resposta = await listarOrdens();
-      setOrdens(resposta.data);
+      setOrdens(resposta.data || []);
       setErro(null);
     } catch (err) {
       console.error("Erro ao buscar ordens de serviço:", err);
@@ -33,11 +39,31 @@ export default function GestaoServico() {
     }
   };
 
-  const handleCadastrarOS = async (e) => {
+  // Preenche o formulário com os dados atuais da Ordem de Serviço selecionada
+  const prepararEdicao = (os) => {
+    setIdEdicao(os.id);
+    setUsuarioId(os.usuario?.id ? String(os.usuario.id) : "");
+    setEquipamentoId(os.equipamento?.id ? String(os.equipamento.id) : "");
+    setDescricao(os.descricao || "");
+    setValorTotal(os.valorTotal ? String(os.valorTotal) : "");
+    setMostrarFormulario(true);
+  };
+
+  // Limpa os campos do formulário com segurança
+  const resetarFormulario = () => {
+    setUsuarioId("");
+    setEquipamentoId("");
+    setDescricao("");
+    setValorTotal("");
+    setIdEdicao(null);
+    setMostrarFormulario(false);
+  };
+
+  // Função unificada para salvar (Decide entre cadastrar nova OS ou atualizar uma existente)
+  const handleSalvarOS = async (e) => {
     e.preventDefault();
     try {
-      
-      const novaOS = {
+      const dadosOS = {
         descricao: descricao || null,
         valorTotal: parseFloat(valorTotal) || 0,
         usuario: {
@@ -48,23 +74,35 @@ export default function GestaoServico() {
         },
       };
 
-      await cadastrarOrdem(novaOS);
+      if (idEdicao) {
+        // Se houver um ID em edição, faz a atualização (PUT)
+        await atualizarOrdem(idEdicao, dadosOS);
+      } else {
+        // Se não, realiza o cadastro normal (POST)
+        await cadastrarOrdem(dadosOS);
+      }
 
-      // Limpa os inputs
-      setUsuarioId("");
-      setEquipamentoId("");
-      setDescricao("");
-      setValorTotal("");
-      setMostrarFormulario(false);
-
-      // Recarrega a listagem atualizada
+      resetarFormulario();
       carregarOrdens();
     } catch (err) {
-      console.error("Erro ao abrir ordem de serviço:", err);
+      console.error("Erro ao salvar ordem de serviço:", err);
       const mensagemErro =
         err.response?.data?.message ||
         "Erro ao salvar a Ordem de Serviço no servidor.";
       alert(mensagemErro);
+    }
+  };
+
+  // Função para deletar uma OS do banco de dados
+  const handleExcluir = async (id) => {
+    if (window.confirm("Tem certeza que deseja excluir esta ordem de serviço?")) {
+      try {
+        await excluirOrdem(id);
+        carregarOrdens();
+      } catch (err) {
+        console.error("Erro ao excluir ordem de serviço:", err);
+        alert("Erro ao excluir a ordem de serviço.");
+      }
     }
   };
 
@@ -80,7 +118,6 @@ export default function GestaoServico() {
     }
   };
 
-  // Helper para tratar e exibir a data/hora do LocalDateTime do Spring Boot
   const formatarData = (dataString) => {
     if (!dataString) return "-";
     try {
@@ -120,21 +157,28 @@ export default function GestaoServico() {
         </div>
         <button
           className="btn btn-primary px-4"
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
+          onClick={() => {
+            if (mostrarFormulario) {
+              resetarFormulario();
+            } else {
+              setMostrarFormulario(true);
+            }
+          }}
         >
           {mostrarFormulario ? "Cancelar" : "+ Abrir OS"}
         </button>
       </header>
 
+      {/* Formulário Híbrido: Nova OS / Editar OS */}
       {mostrarFormulario && (
         <div
           className="card p-4 mb-4 shadow-sm"
           style={{ border: "1px solid var(--line)" }}
         >
-          <h4 style={{ fontFamily: "Fraunces" ,color: "white"} } className="mb-4 ">
-            Abrir Nova Ordem de Serviço
+          <h4 style={{ fontFamily: "Fraunces", color: "white" }} className="mb-4">
+            {idEdicao ? "Editar Ordem de Serviço" : "Abrir Nova Ordem de Serviço"}
           </h4>
-          <form onSubmit={handleCadastrarOS}>
+          <form onSubmit={handleSalvarOS}>
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
@@ -190,7 +234,7 @@ export default function GestaoServico() {
             </div>
             <div className="d-flex justify-content-end mt-2">
               <button type="submit" className="btn btn-success px-4">
-                Salvar Ordem de Serviço
+                {idEdicao ? "Atualizar Ordem" : "Salvar Ordem de Serviço"}
               </button>
             </div>
           </form>
@@ -242,8 +286,7 @@ export default function GestaoServico() {
                       #{os.id}
                     </td>
 
-                    {/* Mapeamentos corrigidos acessando as propriedades internas com segurança (?) */}
-                    <td style={{ fontWeight: 500, color: 'var(--muted)'  }}>
+                    <td style={{ fontWeight: 500, color: 'var(--muted)' }}>
                       {os.usuario?.nome || `Usuário #${os.usuario?.id || "-"}`}
                     </td>
                     <td style={{ color: "var(--muted)", fontSize: "14px" }}>
@@ -275,20 +318,21 @@ export default function GestaoServico() {
                     <td>{renderizarStatus(os.status)}</td>
                     <td className="text-center">
                       <button
-                        className="btn btn-sm"
+                        className="btn btn-sm me-2"
                         style={{
                           border: "1px solid var(--line)",
                           color: "var(--text)",
                         }}
+                        onClick={() => prepararEdicao(os)} 
                       >
                         Editar
                       </button>
                       <button
-                          className="btn btn-sm btn-outline-danger"
-                          onClick={() => handleExcluir(cliente.id)}
-                        >
-                          Excluir
-                        </button>
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => handleExcluir(os.id)} 
+                      >
+                        Excluir
+                      </button>
                     </td>
                   </tr>
                 ))}
