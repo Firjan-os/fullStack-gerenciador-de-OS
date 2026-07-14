@@ -2,15 +2,18 @@ package com.senai.gestaoServicos.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 public class UsuarioDTO {
 	
 	private Long id;
 
     @NotBlank(message = "Nome é obrigatório")
+    @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$", message = "Nome deve conter apenas letras e espaços")
     private String nome;
 
     @NotBlank(message = "Telefone é obrigatório")
+    @Pattern(regexp = "^[0-9]+$", message = "Telefone deve conter apenas números")
     private String telefone;
 
     @Email(message = "E-mail inválido")
