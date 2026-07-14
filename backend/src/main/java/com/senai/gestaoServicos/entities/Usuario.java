@@ -1,10 +1,11 @@
 package com.senai.gestaoServicos.entities;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class Usuario {
 	private String email;
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Equipamento> equipamentos = new HashSet<>();
 	
 	//const

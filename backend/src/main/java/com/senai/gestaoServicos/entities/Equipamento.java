@@ -1,8 +1,21 @@
 package com.senai.gestaoServicos.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.HashSet;
+import java.util.Set;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -24,6 +37,11 @@ public class Equipamento {
 	@JoinColumn(name="usuario_id", nullable = false)
 	@JsonBackReference
 	private Usuario usuario;
+	
+	//cascata para delete
+	@JsonManagedReference
+	@OneToMany(mappedBy = "equipamento", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<OrdemServico> ordensServico = new HashSet<>();
 	
 	//const
 	public Equipamento() {}
