@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { 
-  listarOrdens, 
-  cadastrarOrdem, 
-  atualizarOrdem, 
-  excluirOrdem    
+import {
+  listarOrdens,
+  cadastrarOrdem,
+  atualizarOrdem,
+  excluirOrdem,
 } from "../services/api";
 
 export default function GestaoServico() {
@@ -13,13 +13,14 @@ export default function GestaoServico() {
 
   // ESTADO DO FORMULÁRIO E EDIÇÃO
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [idEdicao, setIdEdicao] = useState(null); // CONTROLE DE EDIÇÃO: Guarda o ID da OS sendo editada
+  const [idEdicao, setIdEdicao] = useState(null);
 
   // ESTADOS DOS CAMPOS
   const [usuarioId, setUsuarioId] = useState("");
   const [equipamentoId, setEquipamentoId] = useState("");
   const [descricao, setDescricao] = useState("");
   const [valorTotal, setValorTotal] = useState("");
+  const [status, setStatus] = useState("ABERTA"); // Bate com StatusOS.ABERTA no back
 
   useEffect(() => {
     carregarOrdens();
@@ -46,6 +47,11 @@ export default function GestaoServico() {
     setEquipamentoId(os.equipamento?.id ? String(os.equipamento.id) : "");
     setDescricao(os.descricao || "");
     setValorTotal(os.valorTotal ? String(os.valorTotal) : "");
+
+    // Normaliza o status vindo do back (ex: remove acentos ou formata se necessário)
+    const statusLimpo = os.status === "CONCLUIDO" ? "CONCLUIDA" : os.status;
+    setStatus(statusLimpo || "ABERTA");
+
     setMostrarFormulario(true);
   };
 
@@ -55,6 +61,7 @@ export default function GestaoServico() {
     setEquipamentoId("");
     setDescricao("");
     setValorTotal("");
+    setStatus("ABERTA");
     setIdEdicao(null);
     setMostrarFormulario(false);
   };
@@ -63,6 +70,7 @@ export default function GestaoServico() {
   const handleSalvarOS = async (e) => {
     e.preventDefault();
     try {
+      // Constrói o DTO idêntico ao esperado pelo Spring Boot (OrdemServicoDTO)
       const dadosOS = {
         descricao: descricao || null,
         valorTotal: parseFloat(valorTotal) || 0,
@@ -72,6 +80,7 @@ export default function GestaoServico() {
         equipamento: {
           id: parseInt(equipamentoId, 10),
         },
+        status: status, // Aqui passamos "ABERTA", "EM_ANDAMENTO" ou "CONCLUIDA"
       };
 
       if (idEdicao) {
@@ -95,7 +104,9 @@ export default function GestaoServico() {
 
   // Função para deletar uma OS do banco de dados
   const handleExcluir = async (id) => {
-    if (window.confirm("Tem certeza que deseja excluir esta ordem de serviço?")) {
+    if (
+      window.confirm("Tem certeza que deseja excluir esta ordem de serviço?")
+    ) {
       try {
         await excluirOrdem(id);
         carregarOrdens();
@@ -175,13 +186,21 @@ export default function GestaoServico() {
           className="card p-4 mb-4 shadow-sm"
           style={{ border: "1px solid var(--line)" }}
         >
-          <h4 style={{ fontFamily: "Fraunces", color: "white" }} className="mb-4">
-            {idEdicao ? "Editar Ordem de Serviço" : "Abrir Nova Ordem de Serviço"}
+          <h4
+            style={{ fontFamily: "Fraunces", color: "white" }}
+            className="mb-4"
+          >
+            {idEdicao
+              ? "Editar Ordem de Serviço"
+              : "Abrir Nova Ordem de Serviço"}
           </h4>
           <form onSubmit={handleSalvarOS}>
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
+                <label
+                  className="form-label"
+                  style={{ fontSize: "14px", color: "white" }}
+                >
                   ID do Usuário Responsável
                 </label>
                 <input
@@ -193,7 +212,10 @@ export default function GestaoServico() {
                 />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
+                <label
+                  className="form-label"
+                  style={{ fontSize: "14px", color: "white" }}
+                >
                   ID do Equipamento
                 </label>
                 <input
@@ -206,8 +228,12 @@ export default function GestaoServico() {
               </div>
             </div>
             <div className="row">
-              <div className="col-md-9 mb-3">
-                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
+              {/* O tamanho do campo de descrição se ajusta dinamicamente caso seja Edição */}
+              <div className={idEdicao ? "col-md-6 mb-3" : "col-md-9 mb-3"}>
+                <label
+                  className="form-label"
+                  style={{ fontSize: "14px", color: "white" }}
+                >
                   Descrição do Problema
                 </label>
                 <input
@@ -218,8 +244,34 @@ export default function GestaoServico() {
                   maxLength="500"
                 />
               </div>
+
+              {/* O select de status só será exibido se você estiver editando uma OS existente */}
+              {idEdicao && (
+                <div className="col-md-3 mb-3">
+                  <label
+                    className="form-label"
+                    style={{ fontSize: "14px", color: "white" }}
+                  >
+                    Status do Chamado
+                  </label>
+                  <select
+                    className="form-select"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    required
+                  >
+                    <option value="ABERTA">Aberta</option>
+                    <option value="EM_ANDAMENTO">Em andamento</option>
+                    <option value="CONCLUIDA">Concluída</option>
+                  </select>
+                </div>
+              )}
+
               <div className="col-md-3 mb-3">
-                <label className="form-label" style={{ fontSize: "14px", color: "white" }}>
+                <label
+                  className="form-label"
+                  style={{ fontSize: "14px", color: "white" }}
+                >
                   Valor Previsto (R$)
                 </label>
                 <input
@@ -286,7 +338,7 @@ export default function GestaoServico() {
                       #{os.id}
                     </td>
 
-                    <td style={{ fontWeight: 500, color: 'var(--muted)' }}>
+                    <td style={{ fontWeight: 500, color: "var(--muted)" }}>
                       {os.usuario?.nome || `Usuário #${os.usuario?.id || "-"}`}
                     </td>
                     <td style={{ color: "var(--muted)", fontSize: "14px" }}>
@@ -299,7 +351,11 @@ export default function GestaoServico() {
                     </td>
 
                     <td
-                      style={{ fontFamily: "IBM Plex Mono", fontSize: "13px", color: 'var(--muted)'}}
+                      style={{
+                        fontFamily: "IBM Plex Mono",
+                        fontSize: "13px",
+                        color: "var(--muted)",
+                      }}
                     >
                       {formatarData(os.dataAbertura)}
                     </td>
@@ -323,13 +379,13 @@ export default function GestaoServico() {
                           border: "1px solid var(--line)",
                           color: "var(--text)",
                         }}
-                        onClick={() => prepararEdicao(os)} 
+                        onClick={() => prepararEdicao(os)}
                       >
                         Editar
                       </button>
                       <button
                         className="btn btn-sm btn-outline-danger"
-                        onClick={() => handleExcluir(os.id)} 
+                        onClick={() => handleExcluir(os.id)}
                       >
                         Excluir
                       </button>
