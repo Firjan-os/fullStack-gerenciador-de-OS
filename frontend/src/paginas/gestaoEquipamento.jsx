@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   listarEquipamentos,
   cadastrarEquipamento,
+  atualizarEquipamento, 
   excluirEquipamento,
 } from "../services/api";
 
@@ -11,11 +12,14 @@ export default function GestaoEquipamento() {
   const [erro, setErro] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-  // CAMPOS DO FORMULÁRIO: Alinhados exatamente com o seu EquipamentoDTO do Java
+  // CONTROLE DE EDIÇÃO: Guarda o ID do equipamento que está sendo editado
+  const [idEdicao, setIdEdicao] = useState(null);
+
+  // CAMPOS DO FORMULÁRIO: Alinhados com o EquipamentoDTO do Java
   const [nome, setNome] = useState("");
   const [marca, setMarca] = useState("");
   const [modelo, setModelo] = useState("");
-  const [usuarioId, setUsuarioId] = useState(""); // Captura o ID do usuário dono
+  const [usuarioId, setUsuarioId] = useState("");
 
   useEffect(() => {
     buscarDadosDoBanco();
@@ -25,7 +29,7 @@ export default function GestaoEquipamento() {
     try {
       setCarregando(true);
       const response = await listarEquipamentos();
-      setEquipamentos(response.data);
+      setEquipamentos(response.data || []);
       setErro(null);
     } catch (err) {
       console.error("Erro ao buscar equipamentos:", err);
@@ -37,30 +41,49 @@ export default function GestaoEquipamento() {
     }
   }
 
-  async function handleCadastrar(e) {
+  // Preenche o formulário com os dados atuais do equipamento escolhido
+  function prepararEdicao(eq) {
+    setIdEdicao(eq.id);
+    setNome(eq.nome || "");
+    setMarca(eq.marca || "");
+    setModelo(eq.modelo || "");
+    setUsuarioId(eq.usuarioId ? String(eq.usuarioId) : "");
+    setMostrarFormulario(true);
+  }
+
+  // Limpa os campos e fecha o formulário com segurança
+  function resetarFormulario() {
+    setNome("");
+    setMarca("");
+    setModelo("");
+    setUsuarioId("");
+    setIdEdicao(null);
+    setMostrarFormulario(false);
+  }
+
+  // Função única para salvar (Decide dinamicamente entre Cadastrar ou Atualizar)
+  async function handleSalvar(e) {
     e.preventDefault();
     try {
-      
-      const novoEquipamento = {
+      const dadosEquipamento = {
         nome,
         marca,
         modelo,
-        usuarioId: parseInt(usuarioId, 10), 
+        usuarioId: parseInt(usuarioId, 10),
       };
 
-      await cadastrarEquipamento(novoEquipamento);
+      if (idEdicao) {
+        // Se temos um ID em edição, chama o PUT do Axios
+        await atualizarEquipamento(idEdicao, dadosEquipamento);
+      } else {
+        // Caso contrário, faz o POST tradicional de cadastro
+        await cadastrarEquipamento(dadosEquipamento);
+      }
 
-      // Limpa os campos após o sucesso
-      setNome("");
-      setMarca("");
-      setModelo("");
-      setUsuarioId("");
-      setMostrarFormulario(false);
-
-      // Atualiza a tabela
+      resetarFormulario();
       buscarDadosDoBanco();
     } catch (err) {
-      console.error("Erro ao cadastrar equipamento:", err);
+      console.error("Erro ao salvar equipamento:", err);
       const mensagemErro =
         err.response?.data?.message ||
         "Erro ao salvar o equipamento no banco de dados. Verifique os dados informados.";
@@ -105,22 +128,28 @@ export default function GestaoEquipamento() {
         </div>
         <button
           className="btn btn-primary px-4"
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
+          onClick={() => {
+            if (mostrarFormulario) {
+              resetarFormulario();
+            } else {
+              setMostrarFormulario(true);
+            }
+          }}
         >
           {mostrarFormulario ? "Cancelar" : "+ Novo Equipamento"}
         </button>
       </header>
 
-      {/* Formulário de Cadastro ajustado */}
+      {/* Formulário Híbrido: Cadastro / Edição */}
       {mostrarFormulario && (
         <div
           className="card p-4 mb-4 shadow-sm"
           style={{ border: "1px solid var(--line)" }}
         >
           <h4 style={{ fontFamily: "Fraunces" }} className="mb-4">
-            Cadastrar Novo Equipamento
+            {idEdicao ? "Editar Equipamento" : "Cadastrar Novo Equipamento"}
           </h4>
-          <form onSubmit={handleCadastrar}>
+          <form onSubmit={handleSalvar}>
             <div className="row">
               <div className="col-md-3 mb-3">
                 <label
@@ -184,7 +213,7 @@ export default function GestaoEquipamento() {
             </div>
             <div className="d-flex justify-content-end mt-2">
               <button type="submit" className="btn btn-success px-4">
-                Salvar Equipamento
+                {idEdicao ? "Atualizar no Banco" : "Salvar Equipamento"}
               </button>
             </div>
           </form>
@@ -213,7 +242,7 @@ export default function GestaoEquipamento() {
                 </tr>
               </thead>
               <tbody>
-                {equipamentos.length === 0 ? (
+                {!equipamentos || equipamentos.length === 0 ? (
                   <tr>
                     <td colSpan="6" className="text-center py-4 text-muted">
                       Nenhum equipamento cadastrado no inventário.
@@ -253,6 +282,7 @@ export default function GestaoEquipamento() {
                             border: "1px solid var(--line)",
                             color: "var(--text)",
                           }}
+                          onClick={() => prepararEdicao(eq)}
                         >
                           Editar
                         </button>
