@@ -44,16 +44,16 @@ public class MassaDados implements CommandLineRunner {
     private List<Usuario> criarUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
 
-        usuarios.add(new Usuario("Ana Souza", "(11) 91234-5678", "ana.souza@email.com"));
-        usuarios.add(new Usuario("Carlos Lima", "(11) 92345-6789", "carlos.lima@email.com"));
-        usuarios.add(new Usuario("Mariana Oliveira", "(11) 93456-7890", "mariana.oliveira@email.com"));
-        usuarios.add(new Usuario("João Pereira", "(11) 94567-8901", "joao.pereira@email.com"));
-        usuarios.add(new Usuario("Fernanda Costa", "(11) 95678-9012", "fernanda.costa@email.com"));
-        usuarios.add(new Usuario("Ricardo Almeida", "(11) 96789-0123", "ricardo.almeida@email.com"));
-        usuarios.add(new Usuario("Patrícia Santos", "(11) 97890-1234", "patricia.santos@email.com"));
-        usuarios.add(new Usuario("Eduardo Silva", "(11) 98901-2345", "eduardo.silva@email.com"));
-        usuarios.add(new Usuario("Beatriz Ferreira", "(11) 99012-3456", "beatriz.ferreira@email.com"));
-        usuarios.add(new Usuario("Lucas Rocha", "(11) 90123-4567", "lucas.rocha@email.com"));
+        usuarios.add(new Usuario("Ana Souza", "11912345678", "ana.souza@email.com"));
+        usuarios.add(new Usuario("Carlos Lima", "21923456789", "carlos.lima@email.com"));
+        usuarios.add(new Usuario("Mariana Oliveira", "67934567890", "mariana.oliveira@email.com"));
+        usuarios.add(new Usuario("João Pereira", "21945678901", "joao.pereira@email.com"));
+        usuarios.add(new Usuario("Fernanda Costa", "11956789012", "fernanda.costa@email.com"));
+        usuarios.add(new Usuario("Ricardo Almeida", "67967890123", "ricardo.almeida@email.com"));
+        usuarios.add(new Usuario("Patrícia Santos", "21978901234", "patricia.santos@email.com"));
+        usuarios.add(new Usuario("Eduardo Silva", "11989012345", "eduardo.silva@email.com"));
+        usuarios.add(new Usuario("Beatriz Ferreira", "67990123456", "beatriz.ferreira@email.com"));
+        usuarios.add(new Usuario("Lucas Rocha", "21901234567", "lucas.rocha@email.com"));
 
         return usuarioRepository.saveAll(usuarios);
     }
