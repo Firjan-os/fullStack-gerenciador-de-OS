@@ -299,15 +299,15 @@ export default function GestaoServico() {
         <div className="table-responsive">
           {carregando ? (
             <div
-              className="text-center p-5 text-muted"
-              style={{ fontFamily: "IBM Plex Mono" }}
+              className="text-center p-5"
+              style={{ fontFamily: "IBM Plex Mono", color: "white" }}
             >
               Carregando chamados...
             </div>
           ) : ordens.length === 0 ? (
             <div
-              className="text-center p-5 text-muted"
-              style={{ fontFamily: "IBM Plex Mono" }}
+              className="text-center p-5"
+              style={{ fontFamily: "IBM Plex Mono", color: "white" }}
             >
               Nenhuma ordem de serviço encontrada.
             </div>

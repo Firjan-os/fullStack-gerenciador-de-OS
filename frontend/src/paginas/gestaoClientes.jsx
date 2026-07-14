@@ -132,13 +132,15 @@ export default function GestaoClientes() {
       {/* Formulário Dinâmico de Cadastro / Edição */}
       {mostrarFormulario && (
         <div className="card p-4 mb-4 shadow-sm">
-          <h4 style={{ fontFamily: "Fraunces" }} className="mb-3">
+          <h4 style={{ fontFamily: "Fraunces", color: "white" }} className="mb-3">
             {idEdicao ? "Editar Cliente" : "Novo Cliente"}
           </h4>
           <form onSubmit={handleSalvar}>
             <div className="row">
               <div className="col-md-4 mb-3">
-                <label className="form-label">Nome</label>
+                <label className="form-label" style={{ color: "white" }}>
+                  Nome
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -148,7 +150,9 @@ export default function GestaoClientes() {
                 />
               </div>
               <div className="col-md-4 mb-3">
-                <label className="form-label">Telefone</label>
+                <label className="form-label" style={{ color: "white" }}>
+                  Telefone
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -158,7 +162,9 @@ export default function GestaoClientes() {
                 />
               </div>
               <div className="col-md-4 mb-3">
-                <label className="form-label">E-mail</label>
+                <label className="form-label" style={{ color: "white" }}>
+                  E-mail
+                </label>
                 <input
                   type="email"
                   className="form-control"

@@ -146,7 +146,7 @@ export default function GestaoEquipamento() {
           className="card p-4 mb-4 shadow-sm"
           style={{ border: "1px solid var(--line)" }}
         >
-          <h4 style={{ fontFamily: "Fraunces" }} className="mb-4">
+          <h4 style={{ fontFamily: "Fraunces", color: "white" }} className="mb-4">
             {idEdicao ? "Editar Equipamento" : "Cadastrar Novo Equipamento"}
           </h4>
           <form onSubmit={handleSalvar}>
