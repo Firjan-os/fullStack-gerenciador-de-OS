@@ -43,16 +43,6 @@ projeto-full/
 ├── backend/     # API Spring Boot (Java, JPA, MySQL)
 ├── frontend/    # Aplicação React (Components, Hooks, Services)
 └── README.md    # Documentação do projeto
-
-## 📁 Estrutura do Repositório
-
-```text
-projeto-full/
-├── backend/     # Servidor, APIs REST e regras de negócio em Java
-├── frontend/    # Interface do usuário em JavaScript, HTML e CSS
-└── README.md    # Documentação do projeto
-```
-
 ---
 
 ## ⚙️ Como Executar o Projeto Localmente
