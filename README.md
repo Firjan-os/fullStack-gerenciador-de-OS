@@ -57,12 +57,10 @@ npm run dev
 
 ## 👥 Equipe de Desenvolvimento
 
-| Desenvolvedor | GitHub |
-| :--- | :--- | :--- |
-| **Cassio Oliveira** | [@CassioOliveirasilva](https://github.com/CassioOliveirasilva) |
-| **Gabriel Alcantra** | [@Gabriel-srAlcantara](https://github.com/Gabriel-srAlcantara) |
-| **Isabelle Pantoja** | [@BelleCP-ctrl](https://github.com/BelleCP-ctrl) |
-| **Sophia Almeida** | [@sophialmeida43](https://github.com/sophialmeida43) |
+- **Cassio Oliveira** — [@CassioOliveirasilva](https://github.com/CassioOliveirasilva)
+- **Gabriel Alcantra** — [@Gabriel-srAlcantara](https://github.com/Gabriel-srAlcantara)
+- **Isabelle Pantoja** — [@BelleCP-ctrl](https://github.com/BelleCP-ctrl)
+- **Sophia Almeida** — [@sophialmeida43](https://github.com/sophialmeida43)
 
 ---
 
