@@ -1,19 +1,48 @@
-# 🚀 Projeto Full Stack — Firjan SENAI
+# 🛠️ Sistema de Gestão de Ordens de Serviço (Assistência Técnica) — Firjan SENAI
 
-Aplicação web Full Stack desenvolvida em equipe como projeto prático do curso de **Desenvolvimento de Sistemas** da **Firjan SENAI**. O sistema integra uma interface **Front-End** interativa conectada a uma API **Back-End** em Java.
+Aplicação Full Stack para controle completo de reparos técnicos, cadastro de clientes/equipamentos, gerenciamento dinâmico de Ordens de Serviço (OS) e visualização de métricas e faturamento.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 💻 Ecossistema do Projeto
+
+### ⚙️ Back-End
+- **Java com Spring Boot**: Construção da API RESTful, lógica de negócio e regras do sistema.
+- **Spring Data JPA**: Abstração e manipulação dos dados com suporte a ORM.
+- **MySQL**: Banco de dados relacional para persistência dos dados de clientes, equipamentos e ordens de serviço.
+
+### 🎨 Front-End
+- **React com JavaScript**: Interface reativa e moderna consumindo a API REST do Back-End.
+- **Componentização e Hooks**: Arquitetura focada em modularidade, estado global/local e reutilização de componentes.
+
+---
+
+## 📌 Funcionalidades Principais
+
+- 👤 **Cadastro de Clientes e Equipamentos**: Registro e vinculação de dispositivos para manutenção.
+- 📋 **Abertura e Controle de OS**: Gestão de status dinâmicos (Pendente, Em Manutenção, Concluído, etc.).
+- 📊 **Dashboard Financeiro e Operacional**: Indicadores de total faturado e contagem de serviços pendentes.
+
+---
+
+## 🛠️ Tecnologias e Proporção no Repositório
 
 | Tecnologia | Função no Projeto | Proporção |
 | :--- | :--- | :---: |
-| **JavaScript** | Lógica e Interatividade do Front-End | 53.4% |
-| **Java** | API Rest, Serviços e Regras do Back-End | 43.8% |
-| **CSS3** | Estilização e Layout da Aplicação | 2.5% |
-| **HTML5** | Estruturação de Páginas e Elementos | 0.3% |
+| **JavaScript / React** | Interface Reativa e Consumo de API | 53.4% |
+| **Java / Spring Boot** | API REST, Regras de Negócio e JPA | 43.8% |
+| **CSS3** | Estilização e Design System | 2.5% |
+| **HTML5** | Estruturação de Elementos | 0.3% |
 
 ---
+
+## 📁 Estrutura do Repositório
+
+```text
+projeto-full/
+├── backend/     # API Spring Boot (Java, JPA, MySQL)
+├── frontend/    # Aplicação React (Components, Hooks, Services)
+└── README.md    # Documentação do projeto
 
 ## 📁 Estrutura do Repositório
 
